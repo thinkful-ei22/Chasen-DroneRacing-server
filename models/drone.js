@@ -9,7 +9,8 @@ const droneSchema = mongoose.Schema({
   weight: 'number',
   drag: 'number',
   durability: 'number',
-  handling: 'number'
+  handling: 'number',
+  pointBalance: 'number'
   // droneLevel: 'number'
 });
 
@@ -19,8 +20,7 @@ const userSchema = mongoose.Schema({
   // level: 'number',
   // wins: 'number',
   // losses: 'number',
-  // money: 'number',
-  pointBalance: 'number'
+  // money: 'number'
 });
 
 userSchema.pre('find', function(){

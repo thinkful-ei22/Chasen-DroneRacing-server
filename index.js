@@ -13,6 +13,9 @@ const { dbConnect } = require('./db-mongoose');
 
 
 const app = express();
+// const bodyParser = require('body-parser');
+// app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
@@ -23,7 +26,7 @@ app.use(
 // // Create a static webserver
 // app.use(express.static('public'));
 // // Parse request body
-// app.use(express.json());
+
 
 app.use(
   cors({
@@ -32,12 +35,12 @@ app.use(
 );
 
 app.get('/api/drone/', (req, res, next) =>{
-  const id = ObjectId('000000000000000000000001');
+  const id = '000000000000000000000001';
   // const id = req.params.id;
   
   const findOpp = Drone.aggregate([
-    {$match: {_id: id}}]);
-    // { $sample: { size: 1 } }]);
+    {$match: {_id: {$ne: mongoose.Types.ObjectId('000000000000000000000001')}}},
+    { $sample: { size: 1 } }]);
   findOpp.then(result=>{ 
     //////DONT WANT RESULT TO BE SAME ID
     // console.log(typeof result[0]._id.toString());
@@ -53,14 +56,36 @@ app.get('/api/drone/', (req, res, next) =>{
     .catch(err=> next(err));
 });
 
+app.get('/api/drone/:id', (req, res, next) => {
+  const id = req.params.id;
+
+  Drone.findOne({_id:id})
+    .then(result => {
+      if (result) {
+        res.json(result);
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
 app.put('/api/drone/:id', (req, res, next) => {
   ///drone speed, acc, ect doing to change
   const id = req.params.id;
-  const{speed, acceleration, turning, weight, drag, durablity, handling, pointBalance} = req.body;
-  const updateStats = {speed, acceleration, turning, weight, drag, durablity, handling};
+  console.log(req.body);
+  
+  const { speed, acceleration, turning, weight, drag, durability, handling, pointBalance} = req.body;
+  const updateStats = {speed, acceleration, turning, weight, drag, durability, handling, pointBalance};
 
+  console.log(speed, acceleration, turning, weight, drag, durability, handling, pointBalance);
+  
   if(pointBalance < 0){
     const err = new Error('Can NOT have a negative point balance');
+    err.status = 400;
+    console.log('pointbalance error');
     return next(err);
   }
   Drone.findByIdAndUpdate(id, updateStats, {new:true})
@@ -69,6 +94,7 @@ app.put('/api/drone/:id', (req, res, next) => {
     })
     .catch(err=> next(err));
 });
+
 
 
 // Custom 404 Not Found route handler
@@ -84,6 +110,7 @@ app.use((err, req, res, next) => {
     const errBody = Object.assign({}, err, { message: err.message });
     res.status(err.status).json(errBody);
   } else {
+    console.log(err);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
