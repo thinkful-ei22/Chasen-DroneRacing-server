@@ -3,31 +3,18 @@
     "_id": "333333333333333333333300",
     "username": "bobuser",
     "pointBalance": 0,
-    "drone": {
-      "speed": 80, 
-      "acceleration": 74,
-      "turning": 74,
-      "weight": 60,
-      "drag": 75,
-      "durability": 74,
-      "handling": 75,
-      "droneLevel": 75
-    }
+    "drone": "000000000000000000000001"
   },
   { 
     "_id": "333333333333333333333301",
     "username": "sallyuser",
     "pointBalance": 0,
-    "drone": {
-      "speed": 80, 
-      "acceleration": 74,
-      "turning": 74,
-      "weight": 60,
-      "drag": 75,
-      "durability": 74,
-      "handling": 75,
-      "droneLevel": 75
-    }
+    "drone": "000000000000000000000002"
+  },
+  {
+    "_id": "333333333333333333333302",
+    "username": "jerryuser",
+    "pointBalance": 0,
+    "drone": "000000000000000000000002"
   }
-
 ]

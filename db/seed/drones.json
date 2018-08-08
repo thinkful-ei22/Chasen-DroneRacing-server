@@ -1,0 +1,32 @@
+[
+  {
+      "_id":"000000000000000000000001",
+      "speed": 75, 
+      "acceleration": 74,
+      "turning": 75,
+      "weight": 74,
+      "drag": 75,
+      "durability": 74,
+      "handling": 75
+    },
+    {
+        "_id":"000000000000000000000002",
+        "speed": 80, 
+        "acceleration": 74,
+        "turning": 74,
+        "weight": 60,
+        "drag": 75,
+        "durability": 74,
+        "handling": 75
+    },
+    {
+      "_id":"000000000000000000000003",
+        "speed": 80, 
+        "acceleration": 74,
+        "turning": 74,
+        "weight": 60,
+        "drag": 75,
+        "durability": 74,
+        "handling": 75
+    }
+]
