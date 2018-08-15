@@ -46,15 +46,16 @@ router.get('/:id', (req, res, next) =>{
 router.put('/:id', (req, res, next) => {
   ///drone speed, acc, ect doing to change
   const id = req.params.id;
-  console.log(id);
-  console.log('...........');
-  console.log(req.body);
+  // console.log(id);
+  // console.log('...........');
+  // console.log(req.body);
   
-  const { speed, acceleration, turning, weight, drag, durability, handling, pointBalance} = req.body;
-  const updateStats = {speed, acceleration, turning, weight, drag, durability, handling, pointBalance};
+  const { speed, acceleration, turning, weight, drag, durability, handling, pointBalance, user} = req.body;
+  const updateStats = {speed, acceleration, turning, weight, drag, durability, handling, pointBalance, user};
 
-  console.log(speed, acceleration, turning, weight, drag, durability, handling, pointBalance);
-  
+  // console.log(speed, acceleration, turning, weight, drag, durability, handling, pointBalance);
+  console.log('...........');
+  console.log(user);
   if(pointBalance < 0){
     const err = new Error('Can NOT have a negative point balance');
     err.status = 400;
