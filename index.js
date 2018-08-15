@@ -5,12 +5,15 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose= require('mongoose');
 const {User, Drone} = require('./models/drone');
-
-
+const passport = require('passport');
 
 const { PORT, CLIENT_ORIGIN, DATABASE_URL } = require('./config');
 const { dbConnect } = require('./db-mongoose');
+const {localStrategy, jwtStrategy} = require('./passport/strategies');
 
+const dronesRouter = require('./routes/drones');
+const authRouter = require('./routes/auth');
+const usersRouter = require('./routes/users');
 
 const app = express();
 // const bodyParser = require('body-parser');
@@ -23,79 +26,20 @@ app.use(
   })
 );
 
-// // Create a static webserver
-// app.use(express.static('public'));
-// // Parse request body
-
-
 app.use(
   cors({
     origin: CLIENT_ORIGIN
   })
 );
 
-app.get('/api/drone/', (req, res, next) =>{
-  const id = '000000000000000000000001';
-  // const id = req.params.id;
-  
-  const findOpp = Drone.aggregate([
-    {$match: {_id: {$ne: mongoose.Types.ObjectId('000000000000000000000001')}}},
-    { $sample: { size: 1 } }]);
-  findOpp.then(result=>{ 
-    //////DONT WANT RESULT TO BE SAME ID
-    // console.log(typeof result[0]._id.toString());
-    console.log(result[0]._id.toString());
-    console.log(id);
-    console.log(id===result[0]._id.toString());
-    
-    return result;
-  })  
-    .then(result => {
-      res.json(result);
-    })
-    .catch(err=> next(err));
-});
+//utilize 'localStrategy'
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
-app.get('/api/drone/:id', (req, res, next) => {
-  const id = req.params.id;
-
-  Drone.findOne({_id:id})
-    .then(result => {
-      if (result) {
-        res.json(result);
-      } else {
-        next();
-      }
-    })
-    .catch(err => {
-      next(err);
-    });
-});
-
-app.put('/api/drone/:id', (req, res, next) => {
-  ///drone speed, acc, ect doing to change
-  const id = req.params.id;
-  console.log(req.body);
-  
-  const { speed, acceleration, turning, weight, drag, durability, handling, pointBalance} = req.body;
-  const updateStats = {speed, acceleration, turning, weight, drag, durability, handling, pointBalance};
-
-  console.log(speed, acceleration, turning, weight, drag, durability, handling, pointBalance);
-  
-  if(pointBalance < 0){
-    const err = new Error('Can NOT have a negative point balance');
-    err.status = 400;
-    console.log('pointbalance error');
-    return next(err);
-  }
-  Drone.findByIdAndUpdate(id, updateStats, {new:true})
-    .then(result=>{
-      res.json(result);
-    })
-    .catch(err=> next(err));
-});
-
-
+//mount routers
+app.use('/api/drone', dronesRouter);
+app.use('/api/users', usersRouter);
+app.use('/api/auth', authRouter);
 
 // Custom 404 Not Found route handler
 app.use((req, res, next) => {

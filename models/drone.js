@@ -1,22 +1,25 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const droneSchema = mongoose.Schema({
-  speed: 'number',
-  acceleration: 'number',
-  turning: 'number',
-  weight: 'number',
-  drag: 'number',
-  durability: 'number',
-  handling: 'number',
-  pointBalance: 'number'
+  speed: {type:'number', default: 75},
+  acceleration: {type:'number', default: 75},
+  turning: {type:'number', default: 75},
+  weight: {type:'number', default: 75},
+  drag: {type:'number', default: 75},
+  durability: {type:'number', default: 75},
+  handling: {type:'number', default: 75},
+  pointBalance: {type:'number', default: 0}
   // droneLevel: 'number'
 });
 
 const userSchema = mongoose.Schema({
-  username: 'string',
+  firstName: 'string',
+  username: {type:String, unique:true, required:true},
   droneId:{type: mongoose.Schema.Types.ObjectId, ref: 'Drone'},
+  password: {type:String, required:true}
   // level: 'number',
   // wins: 'number',
   // losses: 'number',
@@ -24,7 +27,7 @@ const userSchema = mongoose.Schema({
 });
 
 userSchema.pre('find', function(){
-  this.populate('drone');
+  this.populate('droneId');
 });
 
 userSchema.set('toObject', {
@@ -32,6 +35,7 @@ userSchema.set('toObject', {
   versionKey: false,  // remove `__v` version key
   transform: (doc, ret) => {
     ret.id = ret._id;
+    delete ret.password;
   }
 });
 droneSchema.set('toObject', {
@@ -41,6 +45,14 @@ droneSchema.set('toObject', {
     ret.id = ret._id;
   }
 });
+
+userSchema.methods.validatePassword = function (password){
+  return bcrypt.compare(password, this.password);
+};
+
+userSchema.statics.hashPassword = function (password) {
+  return bcrypt.hash(password, 10);
+};
 
 let Drone = mongoose.model('Drone', droneSchema);
 let User = mongoose.model('User', userSchema);

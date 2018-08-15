@@ -2,16 +2,19 @@
   { 
     "_id": "333333333333333333333300",
     "username": "bobuser",
-    "drone": "000000000000000000000001"
+    "droneId": "000000000000000000000001",
+    "password": "$2a$10$kx8mn2XKDFdzGjfnduE1Zen8679Meg78SIVmv8gABdxFk3iuGMPPG"
   },
   { 
     "_id": "333333333333333333333301",
     "username": "sallyuser",
-    "drone": "000000000000000000000002"
+    "droneId": "000000000000000000000002",
+    "password": "$2a$10$DqTt6gU9ZZWVSQJ.YEvu2eM47MW9TWk65B.iC8owm/2yjpGW/L7rK"
   },
   {
     "_id": "333333333333333333333302",
     "username": "jerryuser",
-    "drone": "000000000000000000000002"
+    "droneId": "000000000000000000000002",
+    "password": "$2a$10$kx8mn2XKDFdzGjfnduE1Zen8679Meg78SIVmv8gABdxFk3iuGMPPG"
   }
 ]
