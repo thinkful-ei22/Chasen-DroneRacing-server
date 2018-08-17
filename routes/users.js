@@ -84,7 +84,6 @@ router.post('/', (req, res, next) =>{
         droneId: drone._id,
         password: digest
       };
-      console.log(newUser);
       return User.create(newUser);
     })
     .then(result => {

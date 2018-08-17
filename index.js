@@ -16,8 +16,7 @@ const authRouter = require('./routes/auth');
 const usersRouter = require('./routes/users');
 
 const app = express();
-// const bodyParser = require('body-parser');
-// app.use(bodyParser.json());
+
 app.use(express.json());
 
 app.use(
